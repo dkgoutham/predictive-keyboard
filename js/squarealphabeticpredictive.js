@@ -14,48 +14,106 @@ const keyIndex = [0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 
 
 var predKeys = ["A", "B", "C", "D", "E", "F"]
 
+var start = 0;
+
+// parameters
+var moveCount = 0; // integer LURD
+var totalClicks = 0; // intger LURDS
+var moves = []; // array LURDS
+var moveAlphabets = []; // array alphabets
+var moveTime = []; // array timestamps
+var totalTime = 0; // integer
+
 correction();
 
 document.onkeydown = function(e) {
+  if (start == 1) {
+    moveTime.push(Date.now());
+    // sleep(50);
     switch (e.keyCode) {
-    case 13:
+      case 13:
         /*ENTER*/
-      select();
-      break;
-    case 16:
+        select();
+        totalClicks++;
+        moves.push("S");
+        break;
+      case 16:
         /*SHIFT*/
-      select();
-      break;
-    case 32:
+        select();
+        totalClicks++;
+        moves.push("S");
+        break;
+      case 32:
         /*SPACE*/
-      select();
-      break;
-    case 37:
+        select();
+        totalClicks++;
+        moves.push("S");
+        break;
+      case 37:
         /*LEFT*/
-      moveLeft();
-      break;
-    case 38:
+        moveLeft();
+        moveCount++;
+        moves.push("L");
+        break;
+      case 38:
         /*UP*/
-      moveUp();
-      break;
-    case 39:
+        moveUp();
+        moveCount++;
+        moves.push("U");
+        break;
+      case 39:
         /*RIGHT*/
-      moveRight();
-      break;
-    case 40:
+        moveRight();
+        moveCount++;
+        moves.push("R");
+        break;
+      case 40:
         /*DOWN*/
-      moveDown();
-      break;
-    case 227:
-      window.open("", "_self").close();
-      break;
-    case 228:
-      startTest();
-      break;
-    default:
-      break;
+        moveDown();
+        moveCount++;
+        moves.push("D");
+        break;
+      case 227:
+        window.open("", "_self").close();
+        break;
+      case 228:
+        startTest();
+        break;
+      default:
+        break;
+    }
+    moveAlphabets.push(document.getElementById(selection).innerHTML);
+    if (document.getElementById("inputText").innerText == "TIME TO GO SHOPPING") {
+      window.alert("finish!");
+      console.log("Move Count: " + moveCount);
+      totalClicks += moveCount;
+      console.log("Total Clicks: " + totalClicks);
+      console.log("Moves: " + moves);
+      console.log("Move Alphabets: " + moveAlphabets);
+      totalTime = moveTime.length;
+      totalTime = moveTime[totalTime - 1] - moveTime[0];
+      console.log("Total Time: " + totalTime);
+      console.log("Move Times: " + moveTime);
     }
     correction();
+  } else {
+    switch (e.keyCode) {
+      case 227:
+        window.open("", "_self").close();
+        break;
+      case 228:
+        startTest();
+        break;
+      default:
+        break;
+    };
+    moveCount = 0; // integer LURD
+    totalClicks = 0; // intger LURDS
+    moves = []; // array LURDS
+    moveAlphabets = []; // array alphabets
+    moveTime = []; // array timestamps
+    totalTime = 0;
+  }
 };
 
 function addBorder() {
@@ -555,4 +613,19 @@ async function getPredictions(sequence) {
     console.error('Error fetching predictions:', error);
     return []; // Return an empty array if there is an error
   }
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds) {
+      break;
+    }
+  }
+}
+
+function startTest() {
+	document.getElementById("curtain").classList.remove("d-none");
+	start = 1;
+	console.log(start);
 }
