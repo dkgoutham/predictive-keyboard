@@ -435,7 +435,7 @@ function correction() {
 
 async function getPredictions(sequence) {
   try {
-    const response = await fetch(`https://prediction-keyboard.onrender.com?sequence=${sequence}&num_predictions=4`);
+    const response = await fetch(`https://prediction-keyboard.onrender.com/predict_no_space?sequence=${sequence}&num_predictions=4`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
